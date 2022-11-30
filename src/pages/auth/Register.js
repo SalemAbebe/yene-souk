@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import styles from "./Auth.module.scss";
-import register from "../../assets/images/register.png";
 import { Link, useNavigate } from "react-router-dom";
 import Card from "../../components/card/Card";
 import { toast } from "react-toastify";
-
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/config";
 import Loader from "../../components/loader/Loader";
@@ -78,7 +76,11 @@ const Register = () => {
           </div>
         </Card>
         <div className={styles.img}>
-          <img src={register} alt="Register" width="400" />
+          <img
+            src={require("../../assets/images/register.png")}
+            alt="Register"
+            width="400"
+          />
         </div>
       </section>
     </>

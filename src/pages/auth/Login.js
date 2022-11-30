@@ -4,7 +4,6 @@ import styles from "./Auth.module.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { Card } from "@mui/material";
-// import { signInWithEmailAndPassword } from "firebase/auth";
 import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,

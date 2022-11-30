@@ -29,7 +29,11 @@ const Login = () => {
       {isLoading && <Loader />}
       <section className={`container ${styles.auth}`}>
         <div className={styles.img}>
-          <img src={reset} alt="reset password" width="400" />
+          <img
+            src={require("../../assets/images/reset.png")}
+            alt="reset password"
+            width="400"
+          />
         </div>
         <Card>
           <div className={styles.form}>
