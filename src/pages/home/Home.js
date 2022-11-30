@@ -1,4 +1,5 @@
 import React from "react";
+import AdminOnlyRoute from "../../components/adminOnlyRoute/AdminOnlyRoute";
 
 const Home = () => {
   return (

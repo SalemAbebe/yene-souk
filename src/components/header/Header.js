@@ -13,6 +13,8 @@ import {
   REMOVE_ACTIVE_USER,
 } from "../../redux/slice/authSlice";
 import ShowOnLogin, { ShowOnLogout } from "../hiddenLinks/HiddenLink";
+import { AdUnits } from "@mui/icons-material";
+import AdminOnlyRoute from "../adminOnlyRoute/AdminOnlyRoute";
 
 const logo = (
   <div className={styles.logo}>
@@ -119,6 +121,11 @@ const Header = () => {
             <li className={styles["logo-mobile"]}>
               {logo}
               <FaTimes size={22} color="#fff" onClick={hideMenu} />
+            </li>
+            <li>
+              {/* <AdminOnlyRoute> */}
+              <button className="--btn --btn-primary">Admin</button>
+              {/* </AdminOnlyRoute> */}
             </li>
             <li>
               <NavLink to="/" className={activeLink}>

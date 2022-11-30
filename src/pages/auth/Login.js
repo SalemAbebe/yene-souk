@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Auth.module.scss";
-import login from "../../assets/images/login.jpg";
+// import login from "../../assets/images/login.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { Card } from "@mui/material";
@@ -63,7 +63,11 @@ const Login = () => {
 
       <section className={`container ${styles.auth}`}>
         <div className={styles.img}>
-          <img src={login} alt="Login" width="400" />
+          <img
+            src={require("../../assets/images/login.jpg")}
+            alt="Login"
+            width="400"
+          />
         </div>
         <Card>
           <div className={styles.form}>
