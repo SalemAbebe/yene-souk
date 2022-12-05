@@ -24,7 +24,7 @@ const authSlice = createSlice({
       state.email = null;
       state.userName = null;
       state.userID = null;
-      console.log(state.isLoggedIn);
+      // console.log(state.isLoggedIn);
     },
   },
 });
