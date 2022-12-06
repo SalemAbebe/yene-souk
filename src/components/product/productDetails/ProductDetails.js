@@ -3,10 +3,25 @@ import styles from "./ProductDetails.module.scss";
 import { Link, useParams } from "react-router-dom";
 import Card from "../../card/Card";
 import { data } from "../../../data/data";
+import {
+  ADD_TO_CART,
+  CALCULATE_TOTAL_QUANTITY,
+  DECREASE_CART,
+  selectCartItems,
+} from "../../../redux/slice/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
+  const cartItems = useSelector(selectCartItems);
+  const cart = cartItems.find((cart) => cart.id === id);
+  const isCartAdded = cartItems.findIndex((cart) => {
+    return cart.id === id;
+  });
+
+  // const [] = useState(false);
   // console.log(data);
   // console.log(id);
   console.log(typeof id);
@@ -21,6 +36,16 @@ const ProductDetails = () => {
     setProduct(detail);
   }, [id]);
   console.log(product);
+
+  const addToCart = (cart) => {
+    dispatch(ADD_TO_CART(product));
+    dispatch(CALCULATE_TOTAL_QUANTITY());
+  };
+
+  const decreaseCart = (product) => {
+    dispatch(DECREASE_CART(product));
+    dispatch(CALCULATE_TOTAL_QUANTITY());
+  };
   return (
     <section>
       <div className={`container ${styles.product}`}>
@@ -50,7 +75,7 @@ const ProductDetails = () => {
                 </p>
                 <p>{/* <b>Brand</b> {product.brand} */}</p>
 
-                {/* <div className={styles.count}>
+                <div className={styles.count}>
                   {isCartAdded < 0 ? null : (
                     <>
                       <button
@@ -70,10 +95,10 @@ const ProductDetails = () => {
                       </button>
                     </>
                   )}
-                </div> */}
+                </div>
                 <button
                   className="--btn --btn-danger"
-                  // onClick={() => addToCart(product)}
+                  onClick={() => addToCart(product)}
                 >
                   ADD TO CART
                 </button>
