@@ -28,6 +28,7 @@ function App() {
           <Route path="/reset" element={<Reset />} />
 
           <Route path="/product-details/:id" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
         <Footer />
       </Router>
