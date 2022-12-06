@@ -13,6 +13,7 @@ import ProductDetails from "./components/product/productDetails/ProductDetails";
 import Reset from "./pages/auth/Reset";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CheckoutDetails from "./pages/checkout/CheckoutDetails";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
 
           <Route path="/product-details/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout-details" element={<CheckoutDetails />} />
         </Routes>
         <Footer />
       </Router>
