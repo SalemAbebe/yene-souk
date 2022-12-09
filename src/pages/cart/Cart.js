@@ -50,6 +50,7 @@ const Cart = () => {
   }, [cartItems, dispatch]);
 
   const url = window.location.href;
+  console.log(url);
 
   const checkout = () => {
     if (isLoggedIn) {
