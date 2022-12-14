@@ -2,9 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const initialState = {
-  cartItems: localStorage.getItem("cartItems")
-    ? JSON.parse(localStorage.getItem("cartItems"))
-    : [],
+  // cartItems: localStorage.getItem("cartItems")
+  //   ? JSON.parse(localStorage.getItem("cartItems"))
+  //   : [],
+  cartItems: [],
   cartTotalQuantity: 0,
   cartTotalAmount: 0,
   previousURL: "",
@@ -81,6 +82,12 @@ const cartSlice = createSlice({
 
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
+    CLEAR_CART_ITEM(state, action) {
+      state.cartItems = [];
+      toast.info(`Cart cleared`, {
+        position: "top-left",
+      });
+    },
     CALCULATE_SUBTOTAL(state, action) {
       const array = [];
       state.cartItems.map((item) => {
@@ -109,6 +116,25 @@ const cartSlice = createSlice({
       console.log(action.payload);
       state.previousURL = action.payload;
     },
+    GET_CART_DATA(state, action) {
+      if (localStorage.getItem("cartItems")) {
+        state.cartItems = JSON.parse(localStorage.getItem("cartItems"));
+        console.log(
+          state.cartItems,
+          JSON.parse(localStorage.getItem("cartItems"))
+        );
+        const array = [];
+        state.cartItems.map((item) => {
+          const { cartQuantity } = item;
+          const quantity = cartQuantity;
+          return array.push(quantity);
+        });
+        const totalQuantity = array.reduce((a, b) => {
+          return a + b;
+        }, 0);
+        state.cartTotalQuantity = totalQuantity;
+      }
+    },
   },
 });
 
@@ -116,7 +142,9 @@ export const {
   ADD_TO_CART,
   DECREASE_CART,
   REMOVE_FROM_CART,
+  GET_CART_DATA,
   CLEAR_CART,
+  CLEAR_CART_ITEM,
   CALCULATE_SUBTOTAL,
   CALCULATE_TOTAL_QUANTITY,
   SAVE_URL,

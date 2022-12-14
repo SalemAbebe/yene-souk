@@ -182,7 +182,7 @@ p {
   color: #007bff;
 }
 .--color-danger {
-  color: orangered;
+  color: rgb(167, 41, 167);
 }
 .--color-success {
   color: #28a745;

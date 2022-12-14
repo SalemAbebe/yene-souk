@@ -13,14 +13,16 @@ import { auth } from "../../firebase/config";
 import { toast } from "react-toastify";
 
 import Loader from "../../components/loader/Loader";
-import { useSelector } from "react-redux";
-import { selectPreviousURL } from "../../redux/slice/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { GET_CART_DATA, selectPreviousURL } from "../../redux/slice/cartSlice";
+import { GET_WISHLIST_DATA } from "../../redux/slice/wishListSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const previousURL = useSelector(selectPreviousURL);
+  const dispatch = useDispatch();
   const redirectUser = () => {
     if (previousURL.includes("cart")) {
       return navigate("/cart");
@@ -38,6 +40,8 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        dispatch(GET_CART_DATA());
+        dispatch(GET_WISHLIST_DATA());
         setIsLoading(false);
         toast.success("Login Successful...");
         redirectUser();
@@ -49,7 +53,7 @@ const Login = () => {
       });
   };
 
-  // Login wit Google
+  // Login with Google
   const provider = new GoogleAuthProvider();
   const signInWithGoogle = () => {
     signInWithPopup(auth, provider)

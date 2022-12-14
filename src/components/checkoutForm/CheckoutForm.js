@@ -4,6 +4,7 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import { v4 as uuidv4 } from "uuid";
 import styles from "./CheckoutForm.module.scss";
 import Card from "../card/Card";
 import CheckoutSummary from "../checkoutSummary/CheckoutSummary";
@@ -54,6 +55,7 @@ const CheckoutForm = () => {
     const today = new Date();
     const date = today.toDateString();
     const time = today.toLocaleTimeString();
+    const receiptNo = uuidv4;
     const orderConfig = {
       userID,
       userEmail,
@@ -64,6 +66,7 @@ const CheckoutForm = () => {
       cartItems,
       shippingAddress,
       createdAt: Timestamp.now().toDate(),
+      receiptNo: receiptNo,
     };
     try {
       addDoc(collection(db, "orders"), orderConfig);

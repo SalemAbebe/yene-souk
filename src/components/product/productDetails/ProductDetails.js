@@ -1,51 +1,66 @@
-import React, { useEffect, useState } from "react";
 import styles from "./ProductDetails.module.scss";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Card from "../../card/Card";
-import { data } from "../../../data/data";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ADD_TO_CART,
   CALCULATE_TOTAL_QUANTITY,
   DECREASE_CART,
   selectCartItems,
 } from "../../../redux/slice/cartSlice";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  selectWishListItems,
+  ADD_TO_WISHLIST,
+  CALCULATE_TOTAL_WISHLIST_QUANTITY,
+} from "../../../redux/slice/wishListSlice";
+import useFetchDocument from "../../../customHooks/useFetchDocument";
+import useFetchCollection from "../../../customHooks/useFetchCollection";
+import Card from "../../card/Card";
+import StarsRating from "react-star-rate";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
+  const [isCartAdded, setIsCartAdded] = useState("");
+  const [cart, setCart] = useState("");
+  const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
-  const cart = cartItems.find((cart) => cart.id === id);
-  const isCartAdded = cartItems.findIndex((cart) => {
-    return cart.id === id;
-  });
-
-  // const [] = useState(false);
-  // console.log(data);
-  // console.log(id);
-  console.log(typeof id);
+  const wishListItems = useSelector(selectWishListItems);
+  const { document } = useFetchDocument("products", id);
+  const { data } = useFetchCollection("reviews");
+  const filteredReviews = data.filter((review) => review.productID === id);
 
   useEffect(() => {
-    const detail = data.find((data) => {
-      if (data.id === id * 1) {
-        return data;
-      }
-    });
-    console.log(detail);
-    setProduct(detail);
-  }, [id]);
-  console.log(product);
+    console.log(cartItems);
+    if (cartItems.length > 0) {
+      setCart(cartItems.find((cart) => cart.id === id));
+      setIsCartAdded(
+        cartItems.findIndex((cart) => {
+          return cart.id === id;
+        })
+      );
+    }
+  }, [cartItems]);
 
-  const addToCart = (cart) => {
+  useEffect(() => {
+    setProduct(document);
+  }, [document]);
+
+  const addToCart = (product) => {
     dispatch(ADD_TO_CART(product));
     dispatch(CALCULATE_TOTAL_QUANTITY());
+  };
+
+  const addToWishList = (product) => {
+    dispatch(ADD_TO_WISHLIST(product));
+    dispatch(CALCULATE_TOTAL_WISHLIST_QUANTITY());
   };
 
   const decreaseCart = (product) => {
     dispatch(DECREASE_CART(product));
     dispatch(CALCULATE_TOTAL_QUANTITY());
   };
+
   return (
     <section>
       <div className={`container ${styles.product}`}>
@@ -56,9 +71,8 @@ const ProductDetails = () => {
         {product === null ? (
           <img
             src={require("../../../assets/images/loader-spinning.gif")}
-            alt="Loading ..."
+            alt="Loading"
             style={{ width: "50px" }}
-            className=" --center-all"
           />
         ) : (
           <>
@@ -70,10 +84,12 @@ const ProductDetails = () => {
                 <h3>{product.name}</h3>
                 <p className={styles.price}>{`$${product.price}`}</p>
                 <p>{product.desc}</p>
+                {/* <p>
+                  <b>SKU</b> {product.id}
+                </p> */}
                 <p>
-                  <b>SKU</b> {id}
+                  <b>Brand</b> {product.brand}
                 </p>
-                <p>{/* <b>Brand</b> {product.brand} */}</p>
 
                 <div className={styles.count}>
                   {isCartAdded < 0 ? null : (
@@ -102,11 +118,18 @@ const ProductDetails = () => {
                 >
                   ADD TO CART
                 </button>
+                <br />
+                <button
+                  className="--btn --btn-danger"
+                  onClick={() => addToWishList(product)}
+                >
+                  ADD TO WISHLIST
+                </button>
               </div>
             </div>
           </>
         )}
-        {/* <Card cardClass={styles.card}>
+        <Card cardClass={styles.card}>
           <h3>Product Reviews</h3>
           <div>
             {filteredReviews.length === 0 ? (
@@ -132,7 +155,7 @@ const ProductDetails = () => {
               </>
             )}
           </div>
-        </Card> */}
+        </Card>
       </div>
     </section>
   );

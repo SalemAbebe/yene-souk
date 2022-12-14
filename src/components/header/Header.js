@@ -1,24 +1,34 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
-import logoImg from "../../assets/images/logo.png";
 import { FaShoppingCart, FaTimes, FaUserCircle } from "react-icons/fa";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
-import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../firebase/config";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { FaRegHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  SET_ACTIVE_USER,
   REMOVE_ACTIVE_USER,
+  SET_ACTIVE_USER,
 } from "../../redux/slice/authSlice";
 import ShowOnLogin, { ShowOnLogout } from "../hiddenLinks/HiddenLink";
-import { AdUnits } from "@mui/icons-material";
-import AdminOnlyRoute from "../adminOnlyRoute/AdminOnlyRoute";
+import { AdminOnlyLink } from "../adminOnlyRoute/AdminOnlyRoute";
 import {
   CALCULATE_TOTAL_QUANTITY,
+  CLEAR_CART_ITEM,
+  GET_CART_DATA,
   selectCartTotalQuantity,
 } from "../../redux/slice/cartSlice";
+import logoImg from "../../assets/images/logo.png";
+import {
+  CALCULATE_TOTAL_WISHLIST_QUANTITY,
+  CLEAR_WISHLIST,
+  CLEAR_WISHLIST_ITEM,
+  selectWishListTotalQuantity,
+} from "../../redux/slice/wishListSlice";
+import { CLEAR_CART } from "../../redux/slice/cartSlice";
 
 const logo = (
   <div className={styles.logo}>
@@ -32,12 +42,14 @@ const activeLink = ({ isActive }) => (isActive ? `${styles.active}` : "");
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [displayName, setDisplayName] = useState("");
+  const [displayName, setdisplayName] = useState("");
   const [scrollPage, setScrollPage] = useState(false);
   const cartTotalQuantity = useSelector(selectCartTotalQuantity);
+  const wishListTotalQuantity = useSelector(selectWishListTotalQuantity);
 
   useEffect(() => {
     dispatch(CALCULATE_TOTAL_QUANTITY());
+    dispatch(CALCULATE_TOTAL_WISHLIST_QUANTITY());
   }, []);
 
   const navigate = useNavigate();
@@ -47,29 +59,25 @@ const Header = () => {
   const fixNavbar = () => {
     if (window.scrollY > 50) {
       setScrollPage(true);
+    } else {
+      setScrollPage(false);
     }
-    setScrollPage(false);
   };
   window.addEventListener("scroll", fixNavbar);
-  // monitor currently sign in user
+
+  // Monitor currently sign in user
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user);
-        // const uid = user.uid;
-        // console.log(user.displayName);
-
-        // create user name from email address
+        // console.log(user);
         if (user.displayName == null) {
-          const u1 = user.email.substring(0, user.email.indexOf("@"));
+          const u1 = user.email.slice(0, -10);
           const uName = u1.charAt(0).toUpperCase() + u1.slice(1);
-          console.log(uName);
-          setDisplayName(uName);
+          setdisplayName(uName);
         } else {
-          setDisplayName(user.displayName);
+          setdisplayName(user.displayName);
         }
 
-        // dispatch
         dispatch(
           SET_ACTIVE_USER({
             email: user.email,
@@ -77,13 +85,9 @@ const Header = () => {
             userID: user.uid,
           })
         );
-
-        // ...
       } else {
-        // User is signed out
-        setDisplayName("");
+        setdisplayName("");
         dispatch(REMOVE_ACTIVE_USER());
-        // ...
       }
     });
   }, [dispatch, displayName]);
@@ -99,9 +103,13 @@ const Header = () => {
   const logoutUser = () => {
     signOut(auth)
       .then(() => {
-        toast.success("Logout Successful");
+        toast.success("Logout successfully.");
+        dispatch(CLEAR_CART_ITEM());
+        dispatch(CLEAR_WISHLIST_ITEM());
         navigate("/");
+        window.location.reload();
       })
+
       .catch((error) => {
         toast.error(error.message);
       });
@@ -116,77 +124,97 @@ const Header = () => {
       </Link>
     </span>
   );
+
+  const wishList = (
+    <span className={styles.cart}>
+      <Link to="/wishList">
+        wishlist
+        <FaRegHeart size={20} />
+        <p>{wishListTotalQuantity}</p>
+      </Link>
+    </span>
+  );
+
   return (
-    <header className={scrollPage ? `${styles.fixed}` : null}>
-      <div className={styles.header}>
-        {logo}
+    <>
+      <header className={scrollPage ? `${styles.fixed}` : null}>
+        <div className={styles.header}>
+          {logo}
 
-        <nav
-          className={
-            showMenu ? `${styles["show-nav"]}` : `${styles["hide-nav"]}`
-          }
-        >
-          <div
+          <nav
             className={
-              showMenu
-                ? `${styles["nav-wrapper"]} ${styles["show-nav-wrapper"]}`
-                : `${styles["nav-wrapper"]}`
+              showMenu ? `${styles["show-nav"]}` : `${styles["hide-nav"]}`
             }
-            onClick={hideMenu}
-          ></div>
+          >
+            <div
+              className={
+                showMenu
+                  ? `${styles["nav-wrapper"]} ${styles["show-nav-wrapper"]}`
+                  : `${styles["nav-wrapper"]}`
+              }
+              onClick={hideMenu}
+            ></div>
 
-          <ul onClick={hideMenu}>
-            <li className={styles["logo-mobile"]}>
-              {logo}
-              <FaTimes size={22} color="#fff" onClick={hideMenu} />
-            </li>
-            <li>
-              {/* <AdminOnlyRoute> */}
-              <button className="--btn --btn-primary">Admin</button>
-              {/* </AdminOnlyRoute> */}
-            </li>
-            <li>
-              <NavLink to="/" className={activeLink}>
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/contact" className={activeLink}>
-                Contact Us
-              </NavLink>
-            </li>
-          </ul>
-          <div className={styles["header-right"]} onClick={hideMenu}>
-            <span className={styles.links}>
-              <ShowOnLogout>
-                <NavLink to="/login">Login</NavLink>
-              </ShowOnLogout>
-              <ShowOnLogin>
-                <a href="#" style={{ color: "#ff7722" }}>
-                  <FaUserCircle size={16} />
-                  Hi, {displayName}
-                </a>
+            <ul onClick={hideMenu}>
+              <li className={styles["logo-mobile"]}>
+                {logo}
+                <FaTimes size={22} color="#fff" onClick={hideMenu} />
+              </li>
+              <li>
+                <AdminOnlyLink>
+                  <Link to="/admin/home">
+                    <button className="--btn --btn-primary">Admin</button>
+                  </Link>
+                </AdminOnlyLink>
+              </li>
+              <li>
+                <NavLink to="/" className={activeLink}>
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/contact" className={activeLink}>
+                  Contact Us
+                </NavLink>
+              </li>
+            </ul>
+            <div className={styles["header-right"]} onClick={hideMenu}>
+              <span className={styles.links}>
+                <ShowOnLogout>
+                  <NavLink to="/login" className={activeLink}>
+                    Login
+                  </NavLink>
+                </ShowOnLogout>
+                <ShowOnLogin>
+                  <a href="#home" style={{ color: "#ff7722" }}>
+                    <FaUserCircle size={16} />
+                    Hi, {displayName}
+                  </a>
+                </ShowOnLogin>
+                <ShowOnLogin>
+                  <NavLink to="/order-history" className={activeLink}>
+                    My Orders
+                  </NavLink>
+                </ShowOnLogin>
+                <ShowOnLogin>
+                  <NavLink to="/" onClick={logoutUser}>
+                    Logout
+                  </NavLink>
+                </ShowOnLogin>
+              </span>
+              {wishList}
+              {cart}
+            </div>
+          </nav>
 
-                <NavLink to="/order-history" className={activeLink}>
-                  My Orders
-                </NavLink>
-              </ShowOnLogin>
-              <ShowOnLogin>
-                <NavLink to="/" onClick={logoutUser}>
-                  Logout
-                </NavLink>
-              </ShowOnLogin>
-            </span>
+          <div className={styles["menu-icon"]}>
+            {wishList}
             {cart}
+            <HiOutlineMenuAlt3 size={28} onClick={toggleMenu} />
           </div>
-        </nav>
-
-        <div className={styles["menu-icon"]}>
-          {cart}
-          <HiOutlineMenuAlt3 size={28} onClick={toggleMenu} />
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };
 

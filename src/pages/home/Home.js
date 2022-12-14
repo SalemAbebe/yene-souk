@@ -16,6 +16,7 @@ const Home = () => {
   return (
     <div>
       <Product />
+      {/* <h1>home</h1> */}
     </div>
   );
 };
