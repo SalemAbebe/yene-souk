@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../cart/Cart.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,14 +8,42 @@ import {
   selectWishListItems,
   CLEAR_WISHLIST,
 } from "../../redux/slice/wishListSlice";
-import { ADD_TO_CART } from "../../redux/slice/cartSlice";
+import { ADD_TO_CART, selectCartItems } from "../../redux/slice/cartSlice";
 // import { selectCartItems } from "../../redux/slice/cartSlice";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import useFetchDocument from "../../customHooks/useFetchDocument";
 
 const WishList = () => {
+  const { id } = useParams();
+  const [isCartAdded, setIsCartAdded] = useState("");
+  const [cart, setCart] = useState("");
+  const [product, setProduct] = useState(null);
   const wishListItems = useSelector(selectWishListItems);
-  // const cartItems = useSelector(selectCartItems);
+  const cartItems = useSelector(selectCartItems);
+  const { document } = useFetchDocument("products", id);
   const dispatch = useDispatch();
+  // const cartItems = useSelector(selectCartItems);
+
+  useEffect(() => {
+    console.log(cartItems);
+    if (cartItems.length > 0) {
+      setCart(cartItems.find((cart) => cart.id === id));
+      setIsCartAdded(
+        cartItems.findIndex((cart) => {
+          return cart.id === id;
+        })
+      );
+    }
+  }, [cartItems]);
+
+  useEffect(() => {
+    setProduct(document);
+  }, [document]);
+
+  // const addToCart = (product) => {
+  //   dispatch(ADD_TO_CART(product));
+  //   dispatch(CALCULATE_TOTAL_QUANTITY());
+  // };
 
   const addToCart = (wishList) => {
     dispatch(ADD_TO_CART(wishList));

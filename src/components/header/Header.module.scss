@@ -8,7 +8,7 @@
 
 header {
   width: 100%;
-  background-color: var(--dark-blue);
+  background-color: #b5e61d;
   color: #fff;
 
   .header {
@@ -22,15 +22,18 @@ header {
     align-items: center;
     position: relative;
   }
-
-  // .logo a h2 {
-  //   width: 25%;
-  //   color: #fff;
-  //   // cursor: pointer;
-  //   // span {
-  //   //   color: orangered;
-  //   // }
-  // }
+  .logo {
+    display: flex;
+    flex-direction: column;
+  }
+  .logo a p {
+    // width: 25%;
+    color: #fff;
+    cursor: pointer;
+    // span {
+    //   color: orangered;
+    // }
+  }
 
   nav {
     width: 75%;
@@ -68,7 +71,7 @@ header {
         color: orangered;
       }
       &.active {
-        color: var(--color-danger);
+        color: yellowgreen;
       }
       p {
         position: absolute;

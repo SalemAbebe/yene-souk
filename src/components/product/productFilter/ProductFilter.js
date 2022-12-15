@@ -79,7 +79,7 @@ const ProductFilter = () => {
             );
           })}
         </select>
-        <h4>Price</h4>
+        {/* <h4>Price</h4>
         <p>{`$${price}`}</p>
         <div className={styles.price}>
           <input
@@ -89,7 +89,8 @@ const ProductFilter = () => {
             min={minPrice}
             max={maxPrice}
           />
-        </div>
+        </div> */}
+        <br />
         <br />
         <button className="--btn --btn-danger" onClick={clearFilters}>
           Clear Filter

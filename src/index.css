@@ -3,7 +3,8 @@
 :root {
   --font-family: "Poppins", sans-serif;
   --dark-blue: #0a1930;
-  --light-blue: #1f93ff;
+  --light-blue: #3c9252;
+  --yellow-green:var(--yellow-green)
 
   --color-white: #fff;
   --color-dark: #333;
@@ -298,7 +299,11 @@ p {
 
 .--btn-primary {
   color: #fff;
-  background: #007bff;
+  background: yellowgreen;
+}
+.--btn-admin {
+  color: #fff;
+  background: var(--color-primary);
 }
 .--btn-secondary {
   color: #fff;
@@ -307,7 +312,7 @@ p {
 }
 .--btn-danger {
   color: #fff;
-  background: orangered;
+  background: yellowgreen;
 }
 
 .--btn-success {

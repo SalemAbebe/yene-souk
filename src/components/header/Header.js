@@ -21,7 +21,7 @@ import {
   GET_CART_DATA,
   selectCartTotalQuantity,
 } from "../../redux/slice/cartSlice";
-import logoImg from "../../assets/images/logo.png";
+import logoImg from "../../assets/images/logo1.png";
 import {
   CALCULATE_TOTAL_WISHLIST_QUANTITY,
   CLEAR_WISHLIST,
@@ -34,6 +34,7 @@ const logo = (
   <div className={styles.logo}>
     <Link to="/">
       <img src={logoImg} alt="yene-souk" className="logo" />
+      <p>Yene-souk</p>
     </Link>
   </div>
 );
@@ -158,12 +159,13 @@ const Header = () => {
             <ul onClick={hideMenu}>
               <li className={styles["logo-mobile"]}>
                 {logo}
+
                 <FaTimes size={22} color="#fff" onClick={hideMenu} />
               </li>
               <li>
                 <AdminOnlyLink>
                   <Link to="/admin/home">
-                    <button className="--btn --btn-primary">Admin</button>
+                    <button className="--btn .--btn-admin">Admin</button>
                   </Link>
                 </AdminOnlyLink>
               </li>

@@ -8,9 +8,9 @@ const CheckoutSuccess = () => {
         <p>Thank you for your purchase</p>
         <br />
 
-        {/* <button className="--btn --btn-primary">
+        <button className="--btn --btn-primary">
           <Link to="/order-history">View Order Status</Link>
-        </button> */}
+        </button>
       </div>
     </section>
   );

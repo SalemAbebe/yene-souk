@@ -45,7 +45,7 @@ const ProductList = ({ products }) => {
         <div className={styles.icons}>
           <BsFillGridFill
             size={22}
-            color="orangered"
+            color="yellowgreen"
             onClick={() => setGrid(true)}
           />
 
