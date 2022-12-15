@@ -44,8 +44,7 @@ const Login = () => {
         dispatch(GET_WISHLIST_DATA());
         setIsLoading(false);
         toast.success("Login Successful...");
-        redirectUser("/");
-        // ...
+        redirectUser();
       })
       .catch((error) => {
         toast.error(error.message);

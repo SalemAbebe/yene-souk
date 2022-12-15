@@ -28,6 +28,9 @@ const OrderDetails = () => {
               <b>Order ID</b> {order.id}
             </p>
             <p>
+              <b>Receipt No.</b> {order.receiptNo}
+            </p>
+            <p>
               <b>Order Amount</b> ${order.orderAmount}
             </p>
             <p>
@@ -67,7 +70,7 @@ const OrderDetails = () => {
                       <td>{cartQuantity}</td>
                       <td>{(price * cartQuantity).toFixed(2)}</td>
                       <td className={styles.icons}>
-                        <Link to={`/review-product/${id}`}>
+                        <Link to={`/return-products/${id}`}>
                           <button className="--btn --btn-primary">
                             Return Product
                           </button>

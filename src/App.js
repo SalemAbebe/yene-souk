@@ -21,7 +21,6 @@ import OrderHistory from "./pages/orderHistory/OrderHistory";
 import WishList from "./pages/wishList/WishList";
 import OrderDetails from "./pages/orderDetails/OrderDetails";
 import ReturnProducts from "./components/returnProducts/ReturnProducts";
-// import OrderDetails from "./pages/orderDetails/OrderDetails";
 // import ReviewProducts from "./components/reviewProducts/ReviewProducts";
 
 function App() {
@@ -36,7 +35,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset" element={<Reset />} />
-
           <Route
             path="/admin/*"
             element={
@@ -45,7 +43,6 @@ function App() {
               </AdminOnlyRoute>
             }
           />
-
           <Route path="/product-details/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout-details" element={<CheckoutDetails />} />
