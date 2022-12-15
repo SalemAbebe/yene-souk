@@ -48,6 +48,7 @@ const WishList = () => {
   const addToCart = (wishList) => {
     dispatch(ADD_TO_CART(wishList));
     dispatch(CALCULATE_TOTAL_WISHLIST_QUANTITY());
+    dispatch(REMOVE_FROM_WISHLIST(wishList));
   };
 
   const removeFromWishList = (wishList) => {
